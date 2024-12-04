@@ -21,6 +21,18 @@ public class UserService {
     private RoleDao roleDao;
 
     public AppUser createUser(AppUser user) {
+        // Find User role
+        Role role = roleDao.findById("USER").get();
+
+        // Asign user role to creation of new user
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
+
+        // Encrypt password
+        user.setPassword(getEncryptedPassword(user.getPassword()));
+
+        // Save and return user
         return appUserDao.save(user);
     }
 

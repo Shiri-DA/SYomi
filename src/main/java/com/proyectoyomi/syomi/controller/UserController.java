@@ -4,6 +4,7 @@ import com.proyectoyomi.syomi.entity.AppUser;
 import com.proyectoyomi.syomi.service.UserService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,5 @@ public class UserController {
     public AppUser createUser(@RequestBody AppUser appUser) {
         return userService.createUser(appUser);
     }
-
 
 }
