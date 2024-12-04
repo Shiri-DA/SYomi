@@ -5,7 +5,6 @@ import com.proyectoyomi.syomi.dao.RoleDao;
 import com.proyectoyomi.syomi.entity.AppUser;
 import com.proyectoyomi.syomi.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

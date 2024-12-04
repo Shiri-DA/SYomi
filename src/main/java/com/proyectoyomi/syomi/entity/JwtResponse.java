@@ -2,15 +2,15 @@ package com.proyectoyomi.syomi.entity;
 
 public class JwtResponse {
 
-    private AppUser user;
+    private String username;
     private String token;
 
-    public AppUser getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(AppUser user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getToken() {

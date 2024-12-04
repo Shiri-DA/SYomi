@@ -46,7 +46,7 @@ public class JwtService implements UserDetailsService {
 
         JwtResponse response = new JwtResponse();
         response.setToken(generatedToken);
-        response.setUser(user);
+        response.setUsername(user.getUsername());
         return response;
     }
 
