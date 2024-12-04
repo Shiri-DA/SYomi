@@ -5,6 +5,8 @@ import com.proyectoyomi.syomi.dao.RoleDao;
 import com.proyectoyomi.syomi.entity.AppUser;
 import com.proyectoyomi.syomi.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -22,6 +24,8 @@ public class UserService {
         return appUserDao.save(user);
     }
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     // Just for config TODO: delete before production
     public void initRolesAndUsers() {
         Role adminRole = new Role();
@@ -36,7 +40,7 @@ public class UserService {
 
         AppUser adminUser = new AppUser();
         adminUser.setUsername("admin");
-        adminUser.setPassword("admin");
+        adminUser.setPassword(getEncryptedPassword("admin"));
         Set<Role> adminRoles = new HashSet<Role>();
         adminRoles.add(adminRole);
         adminUser.setRoles(adminRoles);
@@ -44,10 +48,14 @@ public class UserService {
 
         AppUser user1 = new AppUser();
         user1.setUsername("user1");
-        user1.setPassword("user1");
+        user1.setPassword(getEncryptedPassword("user1"));
         Set<Role> userRoles = new HashSet<Role>();
         userRoles.add(userRole);
         user1.setRoles(userRoles);
         appUserDao.save(user1);
+    }
+
+    public String getEncryptedPassword(String password) {
+        return passwordEncoder.encode(password);
     }
 }
