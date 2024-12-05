@@ -34,7 +34,35 @@ public class NewsService {
         return newsDao.save(news);
     }
 
+    // Find list of news with reviewed conditional
     public List<News> findByReviewed(boolean reviewed) {
         return newsDao.findByReviewed(reviewed);
+    }
+
+    // Delete news by id and return true if deleted
+    public boolean deleteNews(Long id) {
+        int count = newsDao.deleteNewsById(id);
+        if (count == 0) throw new IllegalArgumentException(
+                "These news cannot be found"
+        );
+        return true;
+    }
+
+    // Delete news by entity
+    public boolean deleteNews(News news) {
+        int count = newsDao.deleteNews(news);
+        if (count == 0) throw new IllegalArgumentException(
+                "These news cannot be found"
+        );
+        return true;
+    }
+
+    // Delete news by  url
+    public boolean deleteNews(String url) {
+        int count = newsDao.deleteNewsByUrl(url);
+        if (count == 0) throw new IllegalArgumentException(
+                "These news cannot be found"
+        );
+        return true;
     }
 }

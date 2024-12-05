@@ -8,7 +8,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.mockito.Mockito.when;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 
 import java.util.Date;
 import java.util.List;
@@ -31,7 +33,7 @@ public class NewsServiceTest {
         String headline = "Headline";
         String url = "url";
         Boolean reviewed = true;
-        completeNews = new News(headline, date, url, reviewed);
+        completeNews = new News(1L, headline, date, url, reviewed);
     }
 
     @Test
@@ -98,7 +100,7 @@ public class NewsServiceTest {
     @Order(5)
     public void findByReviewedTest() {
         // precondition
-        News news2 = new News("headline2", null, "url2", false);
+        News news2 = new News(2L, "headline2", null, "url2", false);
         when(newsDao.findByReviewed(true)).thenReturn(List.of(completeNews));
         when(newsDao.findByReviewed(false)).thenReturn(List.of(news2));
 
@@ -116,4 +118,60 @@ public class NewsServiceTest {
         Assertions.assertEquals(news2.getHeadline(), newsListFalse.getFirst().getHeadline());
     }
 
+    // Delete testing
+    @Test
+    @Order(6)
+    public void deleteByIdTest() {
+        // precondition
+        when(newsDao.deleteNewsById(completeNews.getId())).thenReturn(1);
+
+        // action
+        boolean isDeleted = newsService.deleteNews(completeNews.getId());
+
+        // verification
+        Assertions.assertTrue(isDeleted);
+        verify(newsDao, times(1)).deleteNewsById(anyLong());
+    }
+
+    @Test
+    @Order(7)
+    public void deleteById_ThrowIllegalArgumentExceptionTest() {
+        // precondition
+        String exceptionDescription = "These news cannot be found";
+        when(newsDao.deleteNewsById(anyLong())).thenReturn(0);
+
+        // action
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () -> newsService.deleteNews(completeNews.getId())
+        );
+
+        // verification
+        Assertions.assertEquals(exceptionDescription, exception.getMessage());
+    }
+
+    @Test
+    @Order(8)
+    public void deleteByEntityTest() {
+        // precondition
+        when(newsDao.deleteNews(completeNews)).thenReturn(1);
+
+        // action
+        boolean isDeleted = newsService.deleteNews(completeNews);
+
+        // verification
+        Assertions.assertTrue(isDeleted);
+    }
+
+    @Test
+    @Order(9)
+    public void deleteByUrlTest() {
+        // precondition
+        when(newsDao.deleteNewsByUrl(completeNews.getUrl())).thenReturn(1);
+
+        // action
+        boolean isDeleted = newsService.deleteNews(completeNews.getUrl());
+
+        // verification
+        Assertions.assertTrue(isDeleted);
+    }
 }

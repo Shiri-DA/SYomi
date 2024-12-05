@@ -13,8 +13,8 @@ TODO
     - [ ] By date range
     - [ ] By media
     - [ ] Combination of date and media
-    - [ ] By reviewed
-  - [ ] Delete news
+    - [X] By reviewed
+  - [x] Delete news
   - [ ] Modify news
 - [ ] News Controller
   - [ ] GET all

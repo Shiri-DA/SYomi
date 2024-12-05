@@ -19,8 +19,9 @@ public class News {
     // TODO one2many relationship with media outlet
     // --- CONSTRUCTORS ---
     // All args
-    public News(String headline, Date creationDate,
+    public News(Long id, String headline, Date creationDate,
                 String url, Boolean reviewed) {
+        this.id = id;
         this.headline = headline;
         this.creationDate = creationDate;
         this.url = url;
