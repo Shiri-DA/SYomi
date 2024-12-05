@@ -174,4 +174,21 @@ public class NewsServiceTest {
         // verification
         Assertions.assertTrue(isDeleted);
     }
+
+    @Test
+    @Order(10)
+    public void getAllNewsTest() {
+        // precondition
+        News news2 = new News(2L, "headline2", null, "url2", false);
+        when(newsDao.findAll()).thenReturn(List.of(completeNews, news2));
+
+        // action
+        List<News> newsList = newsService.getAllNews();
+
+        // verification
+        Assertions.assertNotNull(newsList);
+        Assertions.assertEquals(2, newsList.size());
+        Assertions.assertEquals(completeNews.getHeadline(), newsList.getFirst().getHeadline());
+        Assertions.assertEquals(news2.getHeadline(), newsList.getLast().getHeadline());
+    }
 }

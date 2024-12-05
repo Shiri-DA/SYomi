@@ -15,6 +15,11 @@ public class NewsService {
         this.newsDao = newsDao;
     }
 
+    // Get all news
+    public List<News> getAllNews() {
+        return newsDao.findAll();
+    }
+
     // Find by URL. Throws error if input null or empty
     public News findByUrl(String url) {
         if (url == null || url.isEmpty())
