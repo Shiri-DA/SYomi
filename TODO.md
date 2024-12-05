@@ -6,9 +6,9 @@ TODO
 - [X] News Entity
 - [X] News DAO
 - [ ] News Service
-  - [ ] Add news
+  - [x] Add news
   - [ ] Retrieve news
-    - [ ] By url
+    - [X] By url
     - [ ] By date
     - [ ] By date range
     - [ ] By media

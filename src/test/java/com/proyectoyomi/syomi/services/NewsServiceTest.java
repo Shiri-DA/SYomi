@@ -62,4 +62,35 @@ public class NewsServiceTest {
         // verification
         Assertions.assertEquals(exceptionDescription, myException.getMessage());
     }
+
+    @Test
+    @Order(3)
+    public void addNewsTest() {
+        // precondition
+        when(newsDao.save(completeNews)).thenReturn(completeNews);
+
+        // action
+        News news = newsService.addNews(completeNews);
+
+        // verification
+        Assertions.assertNotNull(news);
+        Assertions.assertEquals(completeNews.getHeadline(), news.getHeadline());
+    }
+
+    @Test
+    @Order(4)
+    public void addNews_ThrowIllegalArgumentExceptionTest() {
+        // precondition
+        String exceptionDescription = "This url already exists";
+        when(newsDao.findByUrl(completeNews.getUrl())).thenReturn(completeNews);
+
+        // action
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () -> newsService.addNews(completeNews)
+        );
+
+        // verification
+        Assertions.assertEquals(exceptionDescription, exception.getMessage());
+    }
+
 }

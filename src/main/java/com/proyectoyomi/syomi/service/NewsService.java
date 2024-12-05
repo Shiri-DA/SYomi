@@ -22,5 +22,13 @@ public class NewsService {
         return newsDao.findByUrl(url);
     }
 
-
+    // Add new news, if url exists send back error saying it exists
+    public News addNews(News news) {
+        // TODO Controller catch findbyurl Exception and reply to FE
+        String newsUrl = news.getUrl();
+        News findByUrl = newsDao.findByUrl(newsUrl);
+        if (findByUrl != null) throw new IllegalArgumentException(
+                "This url already exists");
+        return newsDao.save(news);
+    }
 }
