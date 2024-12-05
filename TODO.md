@@ -3,6 +3,7 @@ TODO
 <details>
 <summary>News Development</summary>
 
+- [ ] News Entity
 - [ ] News DAO
 - [ ] News Service
   - [ ] Add news
@@ -31,6 +32,7 @@ TODO
 <details>
 <summary>Media Outlets Development</summary>
 
+- [ ] Media Entity
 - [ ] Media DAO
 - [ ] Media Service
   - [ ] Add Media
