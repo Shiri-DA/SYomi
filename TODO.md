@@ -4,7 +4,7 @@ TODO
 <summary>News Development</summary>
 
 - [X] News Entity
-- [ ] News DAO
+- [X] News DAO
 - [ ] News Service
   - [ ] Add news
   - [ ] Retrieve news
