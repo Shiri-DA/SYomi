@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-public class New {
+public class News {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,9 +18,9 @@ public class New {
 
     // TODO one2many relationship with media outlet
     // --- CONSTRUCTORS ---
-    // With everything
-    public New(String headline, Date creationDate,
-               String url, Boolean reviewed) {
+    // All args
+    public News(String headline, Date creationDate,
+                String url, Boolean reviewed) {
         this.headline = headline;
         this.creationDate = creationDate;
         this.url = url;
@@ -28,11 +28,11 @@ public class New {
     }
 
     //No args
-    public New() {}
+    public News() {}
 
     // Without reviewed, it automatically puts it in No
-    public New(String headline, Date creationDate,
-               String url) {
+    public News(String headline, Date creationDate,
+                String url) {
         this.headline = headline;
         this.creationDate = creationDate;
         this.url = url;
