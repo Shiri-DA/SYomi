@@ -4,6 +4,8 @@ import com.proyectoyomi.syomi.dao.NewsDao;
 import com.proyectoyomi.syomi.entity.News;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NewsService {
 
@@ -30,5 +32,9 @@ public class NewsService {
         if (findByUrl != null) throw new IllegalArgumentException(
                 "This url already exists");
         return newsDao.save(news);
+    }
+
+    public List<News> findByReviewed(boolean reviewed) {
+        return newsDao.findByReviewed(reviewed);
     }
 }

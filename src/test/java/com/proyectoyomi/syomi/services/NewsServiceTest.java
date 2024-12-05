@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -91,6 +92,28 @@ public class NewsServiceTest {
 
         // verification
         Assertions.assertEquals(exceptionDescription, exception.getMessage());
+    }
+
+    @Test
+    @Order(5)
+    public void findByReviewedTest() {
+        // precondition
+        News news2 = new News("headline2", null, "url2", false);
+        when(newsDao.findByReviewed(true)).thenReturn(List.of(completeNews));
+        when(newsDao.findByReviewed(false)).thenReturn(List.of(news2));
+
+        // action
+        List<News> newsListTrue = newsService.findByReviewed(true);
+        List<News> newsListFalse = newsService.findByReviewed(false);
+
+        // verification
+        Assertions.assertNotNull(newsListTrue);
+        Assertions.assertEquals(1, newsListTrue.size());
+        Assertions.assertEquals(completeNews.getHeadline(), newsListTrue.getFirst().getHeadline());
+
+        Assertions.assertNotNull(newsListFalse);
+        Assertions.assertEquals(1, newsListFalse.size());
+        Assertions.assertEquals(news2.getHeadline(), newsListFalse.getFirst().getHeadline());
     }
 
 }
