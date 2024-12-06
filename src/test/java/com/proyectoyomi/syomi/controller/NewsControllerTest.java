@@ -1,12 +1,18 @@
 package com.proyectoyomi.syomi.controller;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.proyectoyomi.syomi.configuration.JwtRequestFilter;
 import com.proyectoyomi.syomi.entity.News;
 import com.proyectoyomi.syomi.service.NewsService;
+import com.proyectoyomi.syomi.service.UserService;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.hamcrest.MockitoHamcrest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -27,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = NewsController.class)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NewsControllerTest {
 
@@ -42,6 +48,12 @@ public class NewsControllerTest {
     @SuppressWarnings("removal")
     @MockBean
     private NewsService newsService;
+
+    // Have to mock the filter because the controller uses it and webmvctest
+    // does not scan components
+    @SuppressWarnings("removal")
+    @MockBean
+    private JwtRequestFilter jwtRequestFilter;
 
     News news;
 
@@ -59,17 +71,22 @@ public class NewsControllerTest {
     //Post Controller
     @Test
     @Order(1)
-    @WithMockUser(value = "admin")
     public void createNewsTest() throws Exception {
         // precondition
-        given(newsService.addNews(any(News.class))).willReturn(news);
+        News news2 = new News("headline2", null, "url2");
+        // Activate only service when recieve a headline like news 2
+        when(newsService.addNews(MockitoHamcrest
+                .argThat(Matchers
+                        .hasProperty(
+                                "headline",
+                                Matchers.is(news2.getHeadline())))))
+                .thenReturn(news);
 
         // action
         ResultActions response = mockMvc.perform(post("/news")
-                        .with(csrf())
-                        .with(user("ADMIN").roles("ADMIN"))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(news))
+              .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(news2))
         );
 
         // verify

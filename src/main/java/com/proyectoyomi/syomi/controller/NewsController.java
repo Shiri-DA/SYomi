@@ -22,7 +22,7 @@ public class NewsController {
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<News> createNews(@RequestBody News news) {
         News savedNews = newsService.addNews(news);
-        return new ResponseEntity<>(savedNews, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedNews);
     }
 
 }
