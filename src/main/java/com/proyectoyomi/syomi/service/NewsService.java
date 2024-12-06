@@ -56,11 +56,8 @@ public class NewsService {
 
     // Delete news by entity
     public boolean deleteNews(News news) {
-        int count = newsDao.deleteNews(news);
-        if (count == 0) throw new IllegalArgumentException(
-                "These news cannot be found"
-        );
-        return true;
+        Long id = news.getId();
+        return deleteNews(id);
     }
 
     // Delete news by  url

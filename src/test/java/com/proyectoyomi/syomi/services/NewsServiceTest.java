@@ -154,7 +154,7 @@ public class NewsServiceTest {
     @Order(8)
     public void deleteByEntityTest() {
         // precondition
-        when(newsDao.deleteNews(completeNews)).thenReturn(1);
+        when(newsDao.deleteNewsById(1L)).thenReturn(1);
 
         // action
         boolean isDeleted = newsService.deleteNews(completeNews);

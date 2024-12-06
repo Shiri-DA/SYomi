@@ -15,7 +15,7 @@ TODO
     - [ ] Combination of date and media
     - [X] By reviewed
   - [x] Delete news
-  - [ ] Modify news
+  - [x] Modify news
 - [ ] News Controller
   - [ ] GET all
   - [ ] GET by reviewed
@@ -54,3 +54,5 @@ TODO
   - [ ] DELETE media
 - [ ] Access only for admin
 </details>
+
+[ ] Create DTOs

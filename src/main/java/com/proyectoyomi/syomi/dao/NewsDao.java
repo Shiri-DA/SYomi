@@ -13,6 +13,5 @@ public interface NewsDao extends JpaRepository<News, Long> {
     News findByUrl(String url);
     List<News> findByReviewed(boolean reviewed);
     int deleteNewsById(Long id);
-    int deleteNews(News news);
     int deleteNewsByUrl(String url);
 }
