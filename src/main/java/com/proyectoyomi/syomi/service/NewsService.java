@@ -5,6 +5,7 @@ import com.proyectoyomi.syomi.entity.News;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NewsService {
@@ -69,5 +70,20 @@ public class NewsService {
                 "These news cannot be found"
         );
         return true;
+    }
+
+    // Update news
+    public News updateNews(News news) {
+        // Get the news and save it again
+        Optional<News> newsOptional = newsDao.findById(news.getId());
+        if (newsOptional.isEmpty()) throw new IllegalArgumentException(
+                "News Id cannot be found"
+        );
+        return newsDao.save(news);
+    }
+
+    // Find by id
+    public Optional<News> findById(Long id) {
+        return newsDao.findById(id);
     }
 }

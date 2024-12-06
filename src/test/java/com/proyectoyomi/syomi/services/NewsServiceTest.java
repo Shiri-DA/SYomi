@@ -14,6 +14,7 @@ import static org.mockito.Mockito.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -190,5 +191,66 @@ public class NewsServiceTest {
         Assertions.assertEquals(2, newsList.size());
         Assertions.assertEquals(completeNews.getHeadline(), newsList.getFirst().getHeadline());
         Assertions.assertEquals(news2.getHeadline(), newsList.getLast().getHeadline());
+    }
+
+    @Test
+    @Order(11)
+    public void findByIdTest_success() {
+        // precondition
+        when(newsDao.findById(1L)).thenReturn(Optional.of(completeNews));
+
+        // action
+        Optional<News> news = newsService.findById(1L);
+
+        // verification
+        Assertions.assertTrue(news.isPresent());
+        Assertions.assertEquals(completeNews.getHeadline(), news.get().getHeadline());
+    }
+
+    @Test
+    @Order(12)
+    public void findByIdTest_EmptyNews() {
+        //precondition
+        when(newsDao.findById(10L)).thenReturn(Optional.empty());
+
+        // action
+        Optional<News> news = newsService.findById(10L);
+
+        // verification
+        Assertions.assertFalse(news.isPresent());
+    }
+
+    @Test
+    @Order(13)
+    public void updateNewsTest() {
+        // precondition
+        when(newsDao.findById(1L)).thenReturn(Optional.of(completeNews));
+        News newsUpdate = new News(1L, "headline2", null, "url2", false);
+        when(newsDao.save(newsUpdate)).thenReturn(newsUpdate);
+
+        // action
+        News news = newsService.updateNews(newsUpdate);
+
+        // verification
+        Assertions.assertNotNull(news);
+        Assertions.assertEquals(newsUpdate.getHeadline(), news.getHeadline());
+        Assertions.assertEquals(newsUpdate.getUrl(), news.getUrl());
+        Assertions.assertEquals(newsUpdate.getId(), news.getId());
+    }
+
+    @Test
+    @Order(14)
+    public void updateNews_ThrowIllegalArgumentExceptionTest() {
+        // precondition
+        String exceptionDescription = "News Id cannot be found";
+        when(newsDao.findById(1L)).thenReturn(Optional.empty());
+
+        // action
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () -> newsService.updateNews(completeNews)
+        );
+
+        // verification
+        Assertions.assertEquals(exceptionDescription, exception.getMessage());
     }
 }
