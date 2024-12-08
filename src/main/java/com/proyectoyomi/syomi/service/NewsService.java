@@ -2,6 +2,7 @@ package com.proyectoyomi.syomi.service;
 
 import com.proyectoyomi.syomi.dao.NewsDao;
 import com.proyectoyomi.syomi.entity.News;
+import com.proyectoyomi.syomi.exception.ElementExistException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class NewsService {
         // TODO Controller catch findbyurl Exception and reply to FE
         String newsUrl = news.getUrl();
         News findByUrl = newsDao.findByUrl(newsUrl);
-        if (findByUrl != null) throw new IllegalArgumentException(
+        if (findByUrl != null) throw new ElementExistException(
                 "This url already exists");
         return newsDao.save(news);
     }

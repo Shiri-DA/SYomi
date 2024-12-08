@@ -2,6 +2,7 @@ package com.proyectoyomi.syomi.services;
 
 import com.proyectoyomi.syomi.dao.NewsDao;
 import com.proyectoyomi.syomi.entity.News;
+import com.proyectoyomi.syomi.exception.ElementExistException;
 import com.proyectoyomi.syomi.service.NewsService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -89,8 +90,8 @@ public class NewsServiceTest {
         when(newsDao.findByUrl(completeNews.getUrl())).thenReturn(completeNews);
 
         // action
-        IllegalArgumentException exception = Assertions.assertThrows(
-                IllegalArgumentException.class, () -> newsService.addNews(completeNews)
+        ElementExistException exception = Assertions.assertThrows(
+                ElementExistException.class, () -> newsService.addNews(completeNews)
         );
 
         // verification

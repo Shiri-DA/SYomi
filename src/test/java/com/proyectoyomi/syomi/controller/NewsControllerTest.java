@@ -1,5 +1,6 @@
 package com.proyectoyomi.syomi.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
@@ -7,26 +8,22 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.proyectoyomi.syomi.configuration.JwtRequestFilter;
 import com.proyectoyomi.syomi.entity.News;
+import com.proyectoyomi.syomi.exception.ElementExistException;
 import com.proyectoyomi.syomi.service.NewsService;
 import com.proyectoyomi.syomi.service.UserService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
-import org.mockito.ArgumentCaptor;
 import org.mockito.hamcrest.MockitoHamcrest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Date;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -95,5 +92,24 @@ public class NewsControllerTest {
                 .andExpect(jsonPath("$.id").value(news.getId()))
                 .andExpect(jsonPath("$.headline").value(news.getHeadline()))
                 .andExpect(jsonPath("$.url").value(news.getUrl()));
+    }
+
+    @Test
+    @Order(2)
+    public void createNews_UrlExistsTest() throws Exception {
+        // precondition
+        when(newsService.addNews(any(News.class))).thenThrow(
+                new ElementExistException("This url already exists")
+        );
+
+        // action and verify
+        mockMvc.perform(post("/news")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(news))
+        ).andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("This url already exists")
+            );
     }
 }
