@@ -142,4 +142,33 @@ public class NewsControllerTest {
                 .andExpect(jsonPath("$[1].url").value(news2.getUrl())
         );
     }
+
+    @Test
+    @Order(4)
+    public void getByReviewedTest() throws Exception {
+        // precondition
+        when(newsService.findByReviewed(true)).thenReturn(List.of(news2));
+        when(newsService.findByReviewed(false)).thenReturn(List.of(news));
+
+        // action
+        ResultActions responseTrue = mockMvc.perform(get("/news/reviewed?reviewed=true"));
+        ResultActions responseFalse = mockMvc.perform(get("/news/reviewed?reviewed=false"));
+
+        // verify
+        responseTrue.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(news2.getId()))
+                .andExpect(jsonPath("$[0].headline").value(news2.getHeadline()))
+                .andExpect(jsonPath("$[0].url").value(news2.getUrl()))
+                .andExpect(jsonPath("$[0].reviewed").value(true));
+
+        responseFalse.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").value(news.getId()))
+                .andExpect(jsonPath("$[0].headline").value(news.getHeadline()))
+                .andExpect(jsonPath("$[0].url").value(news.getUrl()))
+                .andExpect(jsonPath("$[0].reviewed").value(false));
+    }
 }
