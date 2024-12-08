@@ -18,11 +18,10 @@ TODO
   - [x] Modify news
 - [ ] News Controller
   - [x] GET all
-  - [ ] GET by reviewed
+  - [x] GET by reviewed
   - [ ] GET by url
   - [ ] GET by date
   - [ ] GET by media
-  - [ ] GET by reviewed
   - [x] POST new
   - [ ] PUT new
   - [ ] DELETE new

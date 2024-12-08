@@ -171,4 +171,43 @@ public class NewsControllerTest {
                 .andExpect(jsonPath("$[0].url").value(news.getUrl()))
                 .andExpect(jsonPath("$[0].reviewed").value(false));
     }
+
+    @Test
+    @Order(5)
+    public void getByUrlTest() throws Exception {
+        // precondition
+        when(newsService.findByUrl(news.getUrl())).thenReturn(news);
+
+        // action
+        ResultActions response = mockMvc.perform(get("/news")
+                .param("url", news.getUrl()));
+
+        // verify
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(news.getId()))
+                .andExpect(jsonPath("$.headline").value(news.getHeadline()))
+                .andExpect(jsonPath("$.url").value(news.getUrl()))
+                .andExpect(jsonPath("$.reviewed").value(news.getReviewed())
+        );
+    }
+
+    @Test
+    @Order(6)
+    public void getByUrl_NullTest() throws Exception {
+        // precondition
+        when(newsService.findByUrl("null")).
+        thenThrow(new IllegalArgumentException("url cannot be null or empty"));
+
+        // action
+        ResultActions responseString = mockMvc.perform(get("/news")
+                .param("url", "null")
+        );
+
+        // verify
+        responseString.andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("url cannot be null or empty")
+            );
+    }
 }

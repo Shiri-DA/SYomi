@@ -24,7 +24,7 @@ public class NewsService {
 
     // Find by URL. Throws error if input null or empty
     public News findByUrl(String url) {
-        if (url == null || url.isEmpty())
+        if (url == null || url.equals("null") || url.isEmpty())
             throw new IllegalArgumentException(
                     "url cannot be null or empty");
 

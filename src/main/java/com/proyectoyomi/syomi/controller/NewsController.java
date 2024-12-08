@@ -45,4 +45,11 @@ public class NewsController {
         return ResponseEntity.status(HttpStatus.OK).body(newsList);
     }
 
+    // Find by url, if it is null or empty throws error if it does not find it returns 404
+    @GetMapping(params = "url", produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<News> getNewsByUrl(@RequestParam String url) {
+        News news = newsService.findByUrl(url);
+        return ResponseEntity.status(HttpStatus.OK).body(news);
+    }
 }
