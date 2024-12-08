@@ -23,7 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Date;
+import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -53,6 +55,7 @@ public class NewsControllerTest {
     private JwtRequestFilter jwtRequestFilter;
 
     News news;
+    News news2;
 
     @BeforeEach
     public void setUp() {
@@ -62,6 +65,11 @@ public class NewsControllerTest {
                 new Date(),
                 "Url 1",
                 false
+        );
+
+        news2 = new News(
+                2L, "Headline 2", null,
+                "Url 2", true
         );
     }
 
@@ -111,5 +119,27 @@ public class NewsControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("This url already exists")
             );
+    }
+
+    @Test
+    @Order(3)
+    public void getAllNewsTest() throws Exception {
+        // precondition
+        when(newsService.getAllNews()).thenReturn(List.of(news, news2));
+
+        // action
+        ResultActions response = mockMvc.perform(get("/news"));
+
+        // verify
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].id").value(news.getId()))
+                .andExpect(jsonPath("$[0].headline").value(news.getHeadline()))
+                .andExpect(jsonPath("$[0].url").value(news.getUrl()))
+                .andExpect(jsonPath("$[1].id").value(news2.getId()))
+                .andExpect(jsonPath("$[1].headline").value(news2.getHeadline()))
+                .andExpect(jsonPath("$[1].url").value(news2.getUrl())
+        );
     }
 }

@@ -17,13 +17,13 @@ TODO
   - [x] Delete news
   - [x] Modify news
 - [ ] News Controller
-  - [ ] GET all
+  - [x] GET all
   - [ ] GET by reviewed
   - [ ] GET by url
   - [ ] GET by date
   - [ ] GET by media
   - [ ] GET by reviewed
-  - [ ] POST new
+  - [x] POST new
   - [ ] PUT new
   - [ ] DELETE new
 - [ ] Access only to admin
