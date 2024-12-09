@@ -2,6 +2,7 @@ package com.proyectoyomi.syomi.controller;
 
 import com.proyectoyomi.syomi.entity.News;
 import com.proyectoyomi.syomi.service.NewsService;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -60,5 +61,29 @@ public class NewsController {
     public ResponseEntity<News> updateNews(@RequestBody News news) {
         News updatedNews = newsService.updateNews(news);
         return ResponseEntity.status(HttpStatus.CREATED).body(updatedNews);
+    }
+
+    // Delete news by id
+    @DeleteMapping(value = "/deleteNews/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteNews(@PathVariable("id") Long id) {
+        boolean deleted = newsService.deleteNews(id);
+        if (deleted) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // Delete news by url
+    @DeleteMapping(value = "/deleteNews")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<?> deleteNews(@RequestParam("url") String url) {
+        boolean deleted = newsService.deleteNews(url);
+        if (deleted) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

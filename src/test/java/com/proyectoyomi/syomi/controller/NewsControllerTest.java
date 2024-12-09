@@ -257,7 +257,55 @@ public class NewsControllerTest {
 
     @Test
     @Order(9)
-    public void deleteNewsTest() throws Exception {
+    public void deleteNewsByIdTest() throws Exception {
         // precondition
+        when(newsService.deleteNews(news.getId())).thenReturn(true);
+
+        // action
+        ResultActions response = mockMvc.perform(delete(
+                "/news/deleteNews/{id}",
+                news.getId()));
+
+        //
+        response.andDo(print())
+                .andExpect(status().isNoContent());
+
+    }
+
+    @Test
+    @Order(10)
+    public void deleteNewsByUrlTest() throws Exception {
+        // precondition
+        when(newsService.deleteNews(news.getUrl())).thenReturn(true);
+
+        // action
+        ResultActions response = mockMvc.perform(delete(
+                "/news/deleteNews")
+                .param("url", news.getUrl())
+        );
+
+        //
+        response.andDo(print())
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @Order(11)
+    public void deleteNewsByUrl_DoesNotExistExceptionTest() throws Exception {
+        // precondition
+        when(newsService.deleteNews(news.getUrl())).thenThrow(
+                new ElementDoesNotExistException("These news cannot be found")
+        );
+        String exceptionMessage = "These news cannot be found";
+
+        // action
+        ResultActions response = mockMvc.perform(delete("/news/deleteNews")
+            .param("url", news.getUrl())
+        );
+
+        // verify
+        response.andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value(exceptionMessage));
     }
 }

@@ -50,7 +50,7 @@ public class NewsService {
     // Delete news by id and return true if deleted
     public boolean deleteNews(Long id) {
         long count = newsDao.deleteById(id.longValue());
-        if (count == 0) throw new IllegalArgumentException(
+        if (count == 0) throw new ElementDoesNotExistException(
                 "These news cannot be found"
         );
         return true;
@@ -65,7 +65,7 @@ public class NewsService {
     // Delete news by  url
     public boolean deleteNews(String url) {
         long count = newsDao.deleteByUrl(url);
-        if (count == 0) throw new IllegalArgumentException(
+        if (count == 0) throw new ElementDoesNotExistException(
                 "These news cannot be found"
         );
         return true;

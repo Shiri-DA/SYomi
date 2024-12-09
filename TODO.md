@@ -24,7 +24,7 @@ TODO
   - [ ] GET by media
   - [x] POST new
   - [x] PUT new
-  - [ ] DELETE new
+  - [x] DELETE new
 - [ ] Access only to admin
 </details>
 

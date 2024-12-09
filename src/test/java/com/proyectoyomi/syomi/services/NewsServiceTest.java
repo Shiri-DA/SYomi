@@ -144,8 +144,8 @@ public class NewsServiceTest {
         when(newsDao.deleteById(anyLong())).thenReturn(0L);
 
         // action
-        IllegalArgumentException exception = Assertions.assertThrows(
-                IllegalArgumentException.class, () -> newsService.deleteNews(completeNews.getId())
+        ElementDoesNotExistException exception = Assertions.assertThrows(
+                ElementDoesNotExistException.class, () -> newsService.deleteNews(completeNews.getId())
         );
 
         // verification
