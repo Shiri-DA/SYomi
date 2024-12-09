@@ -126,14 +126,14 @@ public class NewsServiceTest {
     @Order(6)
     public void deleteByIdTest() {
         // precondition
-        when(newsDao.deleteNewsById(completeNews.getId())).thenReturn(1);
+        when(newsDao.deleteById(completeNews.getId().longValue())).thenReturn(1L);
 
         // action
         boolean isDeleted = newsService.deleteNews(completeNews.getId());
 
         // verification
         Assertions.assertTrue(isDeleted);
-        verify(newsDao, times(1)).deleteNewsById(anyLong());
+        verify(newsDao, times(1)).deleteById(anyLong());
     }
 
     @Test
@@ -141,7 +141,7 @@ public class NewsServiceTest {
     public void deleteById_ThrowIllegalArgumentExceptionTest() {
         // precondition
         String exceptionDescription = "These news cannot be found";
-        when(newsDao.deleteNewsById(anyLong())).thenReturn(0);
+        when(newsDao.deleteById(anyLong())).thenReturn(0L);
 
         // action
         IllegalArgumentException exception = Assertions.assertThrows(
@@ -156,7 +156,7 @@ public class NewsServiceTest {
     @Order(8)
     public void deleteByEntityTest() {
         // precondition
-        when(newsDao.deleteNewsById(1L)).thenReturn(1);
+        when(newsDao.deleteById(1L)).thenReturn(1L);
 
         // action
         boolean isDeleted = newsService.deleteNews(completeNews);
@@ -169,7 +169,7 @@ public class NewsServiceTest {
     @Order(9)
     public void deleteByUrlTest() {
         // precondition
-        when(newsDao.deleteNewsByUrl(completeNews.getUrl())).thenReturn(1);
+        when(newsDao.deleteByUrl(completeNews.getUrl())).thenReturn(1L);
 
         // action
         boolean isDeleted = newsService.deleteNews(completeNews.getUrl());

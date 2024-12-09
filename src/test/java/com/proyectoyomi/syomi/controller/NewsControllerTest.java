@@ -254,4 +254,10 @@ public class NewsControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("News Id cannot be found"));
     }
+
+    @Test
+    @Order(9)
+    public void deleteNewsTest() throws Exception {
+        // precondition
+    }
 }
