@@ -23,7 +23,7 @@ TODO
   - [ ] GET by date
   - [ ] GET by media
   - [x] POST new
-  - [ ] PUT new
+  - [x] PUT new
   - [ ] DELETE new
 - [ ] Access only to admin
 </details>

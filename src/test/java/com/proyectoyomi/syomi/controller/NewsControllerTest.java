@@ -8,6 +8,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.proyectoyomi.syomi.configuration.JwtRequestFilter;
 import com.proyectoyomi.syomi.entity.News;
+import com.proyectoyomi.syomi.exception.ElementDoesNotExistException;
 import com.proyectoyomi.syomi.exception.ElementExistException;
 import com.proyectoyomi.syomi.service.NewsService;
 import com.proyectoyomi.syomi.service.UserService;
@@ -25,8 +26,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Date;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -209,5 +209,49 @@ public class NewsControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("url cannot be null or empty")
             );
+    }
+
+    @Test
+    @Order(7)
+    public void updateNewsTest() throws Exception {
+        // precondition
+        when(newsService.updateNews(any(News.class))).thenReturn(news);
+
+        // action
+        ResultActions response = mockMvc.perform(put("/news")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(news))
+        );
+
+        // verify
+        response.andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(news.getId()))
+                .andExpect(jsonPath("$.headline").value(news.getHeadline()))
+                .andExpect(jsonPath("$.url").value(news.getUrl()))
+                .andExpect(jsonPath("$.reviewed").value(news.getReviewed())
+            );
+    }
+
+    @Test
+    @Order(8)
+    public void updateNews_IdNotFoundTest() throws Exception {
+        // precondition
+        when(newsService.updateNews(any(News.class))).thenThrow(
+                new ElementDoesNotExistException("News Id cannot be found")
+        );
+
+        // action
+        ResultActions resultActions = mockMvc.perform(put("/news")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(news))
+        );
+
+        // verify
+        resultActions.andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("News Id cannot be found"));
     }
 }

@@ -2,6 +2,7 @@ package com.proyectoyomi.syomi.service;
 
 import com.proyectoyomi.syomi.dao.NewsDao;
 import com.proyectoyomi.syomi.entity.News;
+import com.proyectoyomi.syomi.exception.ElementDoesNotExistException;
 import com.proyectoyomi.syomi.exception.ElementExistException;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +75,7 @@ public class NewsService {
     public News updateNews(News news) {
         // Get the news and save it again
         Optional<News> newsOptional = newsDao.findById(news.getId());
-        if (newsOptional.isEmpty()) throw new IllegalArgumentException(
+        if (newsOptional.isEmpty()) throw new ElementDoesNotExistException(
                 "News Id cannot be found"
         );
         return newsDao.save(news);

@@ -2,6 +2,7 @@ package com.proyectoyomi.syomi.services;
 
 import com.proyectoyomi.syomi.dao.NewsDao;
 import com.proyectoyomi.syomi.entity.News;
+import com.proyectoyomi.syomi.exception.ElementDoesNotExistException;
 import com.proyectoyomi.syomi.exception.ElementExistException;
 import com.proyectoyomi.syomi.service.NewsService;
 import org.junit.jupiter.api.*;
@@ -247,8 +248,8 @@ public class NewsServiceTest {
         when(newsDao.findById(1L)).thenReturn(Optional.empty());
 
         // action
-        IllegalArgumentException exception = Assertions.assertThrows(
-                IllegalArgumentException.class, () -> newsService.updateNews(completeNews)
+        ElementDoesNotExistException exception = Assertions.assertThrows(
+                ElementDoesNotExistException.class, () -> newsService.updateNews(completeNews)
         );
 
         // verification

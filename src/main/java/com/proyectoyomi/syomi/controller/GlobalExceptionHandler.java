@@ -1,6 +1,7 @@
 package com.proyectoyomi.syomi.controller;
 
 import com.proyectoyomi.syomi.entity.ErrorDetails;
+import com.proyectoyomi.syomi.exception.ElementDoesNotExistException;
 import com.proyectoyomi.syomi.exception.ElementExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,5 +31,15 @@ public class GlobalExceptionHandler {
                 new Date(), ex.getMessage(), request.getDescription(false)
         );
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ElementDoesNotExistException.class)
+    public ResponseEntity<?> handleElementDoesNotExistException(
+            ElementDoesNotExistException ex, WebRequest request
+    ) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                new Date(), ex.getMessage(), request.getDescription(false)
+        );
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND) ;
     }
 }

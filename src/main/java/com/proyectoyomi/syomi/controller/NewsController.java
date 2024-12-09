@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
 
@@ -51,5 +52,13 @@ public class NewsController {
     public ResponseEntity<News> getNewsByUrl(@RequestParam String url) {
         News news = newsService.findByUrl(url);
         return ResponseEntity.status(HttpStatus.OK).body(news);
+    }
+
+    // Update news. If it does not find id throw error. Return new + location
+    @PutMapping(produces = "application/json")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<News> updateNews(@RequestBody News news) {
+        News updatedNews = newsService.updateNews(news);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedNews);
     }
 }
