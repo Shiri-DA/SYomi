@@ -254,4 +254,19 @@ public class NewsServiceTest {
         // verification
         Assertions.assertEquals(exceptionDescription, exception.getMessage());
     }
+
+    @Test
+    @Order(15)
+    public void findByUrl_NullStringTest() {
+        // precondition
+        String exceptionDescription = "url cannot be null or empty";
+
+        // action
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () -> newsService.findByUrl("null")
+        );
+
+        // verify
+        Assertions.assertEquals(exceptionDescription, exception.getMessage());
+    }
 }

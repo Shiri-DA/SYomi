@@ -19,7 +19,7 @@ TODO
 - [ ] News Controller
   - [x] GET all
   - [x] GET by reviewed
-  - [ ] GET by url
+  - [x] GET by url
   - [ ] GET by date
   - [ ] GET by media
   - [x] POST new
